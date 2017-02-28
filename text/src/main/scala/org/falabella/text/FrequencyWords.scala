@@ -16,6 +16,7 @@ case class InteractionSub(
   
   case class FrequencyWords(
     val words: Array[String],
+    val rep: String,
     val count: Long
   )
   
@@ -35,7 +36,7 @@ object FrequencyWords {
       pathFile = args(2)
       args.foreach(arg => println("Arguments passed -> " + arg.toString))
     } else {
-      println ("Hubo un error al parsear los parametros:")
+      println ("Number of parameters is not correct, please check it: ")
       args.foreach (arg => println ("- " + arg.toString))
       System.exit (1)
     }
@@ -54,9 +55,6 @@ object FrequencyWords {
     
     import sqlContext.implicits._
     val interactions = sqlContext.read.table(nameInteractions)
-    println("printing read table: ")
-    interactions.show()
-    
     
     // second way to filter data 
     // just using a list of fields
@@ -87,7 +85,7 @@ object FrequencyWords {
       val numOcurrences = commentWithoutAccent.filter(comm => 
         stringContains(comm.comentarios, ArrayWord)
         ).count()
-      new FrequencyWords(ArrayWord, numOcurrences)  
+      new FrequencyWords(ArrayWord, ArrayWord(0), numOcurrences)  
     }
     
     sqlContext.sparkContext.parallelize(out).toDF.write.mode(HIVE_SAVE_MODE).saveAsTable(outputTable)

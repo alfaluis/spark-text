@@ -93,7 +93,7 @@ object PruebasText {
       val numOcurrences = commentWithoutAccent.filter(comm => 
         stringContains(comm.comentarios, ListWord)
         ).count()
-      new FrequencyWords(ListWord, numOcurrences)  
+      new FrequencyWords(ListWord, ListWord(0), numOcurrences)  
     }
     
     sqlContext.sparkContext.parallelize(out).toDF.write.mode(HIVE_SAVE_MODE).saveAsTable(outputTable)
